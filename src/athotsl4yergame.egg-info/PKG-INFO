@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: athotsl4yergame
+Version: 0.1.0
+Summary: Touch-first Raspberry Pi cyberpunk arcade game
+Requires-Python: >=3.11
+Requires-Dist: pygame-ce<3,>=2.5
+Provides-Extra: dev
+Requires-Dist: pytest<9,>=8; extra == "dev"
+Requires-Dist: ruff<1,>=0.6; extra == "dev"
+Requires-Dist: mypy<2,>=1.11; extra == "dev"
