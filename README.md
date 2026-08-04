@@ -34,3 +34,11 @@ Build a polished vertical slice containing:
 8. Touch calibration/debug overlay
 
 See `docs/GAME_SPEC.md` and `.github/copilot-instructions.md` before making changes.
+
+## ESP32-S3 Lite edition
+
+The embedded PlatformIO/Arduino campaign is in [`esp32/`](esp32/). It shares the campaign IDs and
+touch semantics with the Raspberry Pi design while providing fixed-step gameplay, RGB565/indexed
+atlas loading, visible missing-art fallbacks, and local NVS score/unlock persistence. See
+[`esp32/README.md`](esp32/README.md) for its ESP32-S3 hardware target, calibration, memory
+budgets, build command, and host-side gameplay check.
