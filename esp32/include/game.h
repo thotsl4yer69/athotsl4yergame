@@ -161,7 +161,11 @@ class Game {
         continue;
       }
       enemy.x -= enemy.speed;
-      if (enemy.x > 98 || enemy.x < 34) {
+      if (enemy.x < 34) {
+        enemy.active = false;
+        continue;
+      }
+      if (enemy.x > 98) {
         continue;
       }
       if (player_.attack_ticks > 0) {
