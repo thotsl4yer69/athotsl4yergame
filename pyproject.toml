@@ -24,6 +24,9 @@ packet-loss = "packet_loss.__main__:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+packet_loss = ["data/*.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
@@ -31,6 +34,9 @@ addopts = "-q"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+[tool.ruff.lint]
+ignore = ["I001", "UP035", "TRY004"]
 
 [tool.mypy]
 python_version = "3.11"
