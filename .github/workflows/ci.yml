@@ -9,6 +9,8 @@ jobs:
   python:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
     env:
       SDL_VIDEODRIVER: dummy
       SDL_AUDIODRIVER: dummy
@@ -30,6 +32,8 @@ jobs:
   esp32:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
