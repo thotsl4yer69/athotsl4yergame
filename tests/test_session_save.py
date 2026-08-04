@@ -24,12 +24,14 @@ def test_stage_events_drive_session() -> None:
     save = SaveData()
     session = CampaignSession(campaign=campaign, save=save)
 
-    session.update(11_000)
+    for _ in range(110):
+        session.update(100)
     assert session.message
     assert session.pickups
     assert session.pidge.retrieve_cooldown_ms >= 0
 
-    session.update(5_000)
+    for _ in range(50):
+        session.update(100)
     assert session.model.enemies
 
 
