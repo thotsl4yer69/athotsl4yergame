@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import argparse
 import os
-from pathlib import Path
 import time
+from pathlib import Path
 
 import pygame
 
@@ -118,7 +118,6 @@ def _draw_world_objects(screen: pygame.Surface, session: CampaignSession) -> Non
             (255, 90, 100),
             ((hx, GROUND_Y), (hx + 12, GROUND_Y - 20), (hx + 24, GROUND_Y)),
         )
-    # Packet Pidge: suspicious urban assistant, not a decorative mascot.
     px = 38 + int(5 * ((session.runtime.elapsed_ms // 180) % 2))
     pygame.draw.ellipse(screen, (120, 125, 135), (px, 105, 22, 14))
     pygame.draw.circle(screen, (150, 155, 160), (px + 18, 108), 7)
