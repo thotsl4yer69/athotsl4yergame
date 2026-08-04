@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pygame
 
+from .characters import load_neon_siren_frames
 from .input import TouchSample, classify_touch
 from .model import Action
 from .save import load_save, write_save
@@ -74,7 +75,27 @@ def _draw_player(screen: pygame.Surface, session: CampaignSession) -> None:
         pygame.draw.ellipse(screen, (200, 70, 255), body.inflate(18, 5), 3)
 
 
-def _draw_enemies(screen: pygame.Surface, session: CampaignSession) -> None:
+def _neon_siren_frame(
+    session: CampaignSession,
+    telegraph_ms: int,
+    frames_by_animation: dict[str, tuple[pygame.Surface, ...]],
+) -> pygame.Surface | None:
+    if not frames_by_animation:
+        return None
+    animation = "telegraph" if telegraph_ms > 0 else (
+        "walk" if (session.runtime.elapsed_ms // 900) % 2 else "idle"
+    )
+    frames = frames_by_animation.get(animation)
+    if not frames:
+        return None
+    return frames[(session.runtime.elapsed_ms // 120) % len(frames)]
+
+
+def _draw_enemies(
+    screen: pygame.Surface,
+    session: CampaignSession,
+    neon_siren_frames: dict[str, tuple[pygame.Surface, ...]],
+) -> None:
     colours = {
         "neon_siren": (255, 65, 170),
         "clout_leech": (115, 235, 210),
@@ -87,8 +108,16 @@ def _draw_enemies(screen: pygame.Surface, session: CampaignSession) -> None:
     for enemy in session.model.enemies:
         ex = int(enemy.x)
         colour = colours.get(enemy.kind, (225, 80, 170))
-        pygame.draw.ellipse(screen, (230, 165, 135), (ex + 8, 184, 23, 23))
-        pygame.draw.rect(screen, colour, (ex, 205, 40, 55), border_radius=12)
+        sprite = (
+            _neon_siren_frame(session, enemy.telegraph_ms, neon_siren_frames)
+            if enemy.kind == "neon_siren"
+            else None
+        )
+        if sprite is None:
+            pygame.draw.ellipse(screen, (230, 165, 135), (ex + 8, 184, 23, 23))
+            pygame.draw.rect(screen, colour, (ex, 205, 40, 55), border_radius=12)
+        else:
+            screen.blit(sprite, (ex - 12, GROUND_Y - 58))
         if enemy.telegraph_ms > 0:
             pygame.draw.circle(screen, (255, 255, 255), (ex + 20, 194), 28, 2)
         if enemy.health > 1:
@@ -125,11 +154,16 @@ def _draw_world_objects(screen: pygame.Surface, session: CampaignSession) -> Non
     pygame.draw.polygon(screen, (230, 180, 40), ((px + 25, 108), (px + 32, 111), (px + 25, 113)))
 
 
-def draw(screen: pygame.Surface, session: CampaignSession, debug: str = "") -> None:
+def draw(
+    screen: pygame.Surface,
+    session: CampaignSession,
+    debug: str = "",
+    neon_siren_frames: dict[str, tuple[pygame.Surface, ...]] | None = None,
+) -> None:
     _draw_background(screen, session)
     _draw_world_objects(screen, session)
     _draw_player(screen, session)
-    _draw_enemies(screen, session)
+    _draw_enemies(screen, session, neon_siren_frames or {})
 
     font = pygame.font.Font(None, 22)
     small = pygame.font.Font(None, 18)
@@ -191,6 +225,7 @@ def run(args: argparse.Namespace) -> int:
     screen = pygame.display.set_mode((WIDTH, HEIGHT), flags)
     pygame.display.set_caption("TH0TSL4YER69: Packet Loss")
     clock = pygame.time.Clock()
+    neon_siren_frames = load_neon_siren_frames()
     press: tuple[int, int, float] | None = None
     debug = ""
     running = True
@@ -233,7 +268,7 @@ def run(args: argparse.Namespace) -> int:
                 press = None
 
         session.update(dt)
-        draw(screen, session, debug if args.touch_debug else "")
+        draw(screen, session, debug if args.touch_debug else "", neon_siren_frames)
         pygame.display.flip()
         if session.model.player.health <= 0:
             session.runtime.restore_checkpoint()

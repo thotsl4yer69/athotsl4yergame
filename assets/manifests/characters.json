@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "characters": [
+    {
+      "id": "neon_siren",
+      "display_name": "Neon Siren",
+      "adult_age_minimum": 25,
+      "source_dir": "assets/source/characters/neon_siren",
+      "canvas": {
+        "width": 128,
+        "height": 128,
+        "pivot": [64, 116],
+        "transparent": true
+      },
+      "animations": {
+        "idle": {
+          "sheet": "assets/source/characters/neon_siren/sheets/neon_siren_idle.png",
+          "frames": 6,
+          "fps": 6
+        },
+        "walk": {
+          "sheet": "assets/source/characters/neon_siren/sheets/neon_siren_walk.png",
+          "frames": 8,
+          "fps": 10
+        },
+        "telegraph": {
+          "sheet": "assets/source/characters/neon_siren/sheets/neon_siren_telegraph.png",
+          "frames": 5,
+          "fps": 8
+        },
+        "attack": {
+          "sheet": "assets/source/characters/neon_siren/sheets/neon_siren_attack.png",
+          "frames": 7,
+          "fps": 12
+        },
+        "hit": {
+          "sheet": "assets/source/characters/neon_siren/sheets/neon_siren_hit.png",
+          "frames": 3,
+          "fps": 8
+        },
+        "disrupted": {
+          "sheet": "assets/source/characters/neon_siren/sheets/neon_siren_disrupted.png",
+          "frames": 6,
+          "fps": 8
+        }
+      }
+    }
+  ]
+}

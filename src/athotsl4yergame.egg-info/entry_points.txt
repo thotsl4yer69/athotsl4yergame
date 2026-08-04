@@ -1,0 +1,2 @@
+[console_scripts]
+packet-loss = packet_loss.__main__:main
