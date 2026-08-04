@@ -1,0 +1,131 @@
+{
+  "campaign_id": "packet_loss_campaign",
+  "version": 1,
+  "stages": [
+    {
+      "id": "d1_queue",
+      "district_id": "velvet_entry",
+      "name": "The Queue",
+      "duration_ms": 90000,
+      "environment": "outdoor_queue_rain",
+      "pi_enabled": true,
+      "esp32_enabled": true,
+      "events": [
+        {"at_ms": 1000, "kind": "bark", "id": "queue_intro", "payload": {"text": "THE LINE IS A SOCIAL CONSTRUCT."}},
+        {"at_ms": 4000, "kind": "pigeon", "id": "pidge_intro", "payload": {"action": "tutorial", "text": "TAP LEFT. TRY NOT TO EAT THE CURB."}},
+        {"at_ms": 7000, "kind": "hazard", "id": "queue_puddle_1", "payload": {"hazard": "puddle", "lane": 0}},
+        {"at_ms": 10500, "kind": "pickup", "id": "queue_krn_1", "payload": {"pickup": "krn_can", "location": "curb"}},
+        {"at_ms": 15000, "kind": "enemy", "id": "queue_siren_1", "payload": {"enemy": "neon_siren"}},
+        {"at_ms": 22000, "kind": "background", "id": "queue_bg_wrong_line", "payload": {"scene": "guest_checks_wrong_queue"}},
+        {"at_ms": 28000, "kind": "pickup", "id": "queue_dust_1", "payload": {"pickup": "thinking_dust", "location": "gutter"}},
+        {"at_ms": 34000, "kind": "enemy", "id": "queue_siren_2", "payload": {"enemy": "neon_siren"}},
+        {"at_ms": 40000, "kind": "checkpoint", "id": "queue_checkpoint_1", "payload": {"label": "halfway"}},
+        {"at_ms": 47000, "kind": "hazard", "id": "queue_barrier_1", "payload": {"hazard": "velvet_barrier"}},
+        {"at_ms": 56000, "kind": "background", "id": "queue_bg_owner", "payload": {"scene": "claims_to_know_owner"}},
+        {"at_ms": 65000, "kind": "enemy", "id": "queue_siren_3", "payload": {"enemy": "neon_siren"}},
+        {"at_ms": 73000, "kind": "pigeon", "id": "queue_pidge_retrieve", "payload": {"action": "retrieve_missed_pickup"}},
+        {"at_ms": 82000, "kind": "hazard", "id": "queue_flash_wall", "payload": {"hazard": "camera_flash_wall"}},
+        {"at_ms": 90000, "kind": "finish", "id": "queue_finish", "payload": {"next": "d1_coat_check"}}
+      ]
+    },
+    {
+      "id": "d1_coat_check",
+      "district_id": "velvet_entry",
+      "name": "Coat Check Collapse",
+      "duration_ms": 95000,
+      "environment": "coat_check_corridor",
+      "pi_enabled": true,
+      "esp32_enabled": false,
+      "events": [
+        {"at_ms": 1000, "kind": "bark", "id": "coat_intro", "payload": {"text": "TICKET 69. COAT UNKNOWN."}},
+        {"at_ms": 7000, "kind": "hazard", "id": "coat_rack_1", "payload": {"hazard": "swinging_coat_rack"}},
+        {"at_ms": 12000, "kind": "enemy", "id": "coat_velvet_1", "payload": {"enemy": "velvet_vandal"}},
+        {"at_ms": 19000, "kind": "pickup", "id": "coat_dust_1", "payload": {"pickup": "thinking_dust", "location": "jammed_locker"}},
+        {"at_ms": 26000, "kind": "background", "id": "coat_bg_bag", "payload": {"scene": "handbag_argument"}},
+        {"at_ms": 34000, "kind": "enemy", "id": "coat_velvet_2", "payload": {"enemy": "velvet_vandal"}},
+        {"at_ms": 42000, "kind": "checkpoint", "id": "coat_checkpoint_1", "payload": {"label": "locker_bank"}},
+        {"at_ms": 50000, "kind": "hazard", "id": "coat_ticket_storm", "payload": {"hazard": "ticket_storm"}},
+        {"at_ms": 58000, "kind": "pickup", "id": "coat_krn_1", "payload": {"pickup": "krn_can", "location": "lost_bag"}},
+        {"at_ms": 67000, "kind": "pigeon", "id": "coat_pidge_scout", "payload": {"action": "reveal_hidden_route"}},
+        {"at_ms": 74000, "kind": "enemy", "id": "coat_velvet_3", "payload": {"enemy": "velvet_vandal"}},
+        {"at_ms": 83000, "kind": "hazard", "id": "coat_machine", "payload": {"hazard": "cloakroom_machine"}},
+        {"at_ms": 95000, "kind": "finish", "id": "coat_finish", "payload": {"next": "d1_main_floor"}}
+      ]
+    },
+    {
+      "id": "d1_main_floor",
+      "district_id": "velvet_entry",
+      "name": "Main Floor Meltdown",
+      "duration_ms": 120000,
+      "environment": "neon_main_floor",
+      "pi_enabled": true,
+      "esp32_enabled": true,
+      "events": [
+        {"at_ms": 1000, "kind": "background", "id": "floor_pole_stage_1", "payload": {"scene": "pole_stage_loop_a"}},
+        {"at_ms": 4000, "kind": "bark", "id": "floor_intro", "payload": {"text": "VIBE CHECK: FAILED SUCCESSFULLY."}},
+        {"at_ms": 9000, "kind": "enemy", "id": "floor_siren_1", "payload": {"enemy": "neon_siren"}},
+        {"at_ms": 15000, "kind": "pickup", "id": "floor_krn_1", "payload": {"pickup": "krn_can", "location": "dance_floor"}},
+        {"at_ms": 22000, "kind": "hazard", "id": "floor_spotlight_1", "payload": {"hazard": "moving_spotlight"}},
+        {"at_ms": 30000, "kind": "enemy", "id": "floor_bottle_1", "payload": {"enemy": "bottle_service_valkyrie"}},
+        {"at_ms": 38000, "kind": "background", "id": "floor_pole_stage_2", "payload": {"scene": "pole_stage_loop_b"}},
+        {"at_ms": 45000, "kind": "pickup", "id": "floor_dust_1", "payload": {"pickup": "thinking_dust", "location": "speaker_stack"}},
+        {"at_ms": 52000, "kind": "checkpoint", "id": "floor_checkpoint_1", "payload": {"label": "centre_bar"}},
+        {"at_ms": 61000, "kind": "enemy", "id": "floor_velvet_1", "payload": {"enemy": "velvet_vandal"}},
+        {"at_ms": 69000, "kind": "hazard", "id": "floor_confetti", "payload": {"hazard": "confetti_cannon"}},
+        {"at_ms": 76000, "kind": "pigeon", "id": "floor_pidge_menace", "payload": {"action": "interrupt_enemy"}},
+        {"at_ms": 84000, "kind": "enemy", "id": "floor_siren_2", "payload": {"enemy": "neon_siren"}},
+        {"at_ms": 92000, "kind": "pickup", "id": "floor_krn_2", "payload": {"pickup": "krn_can", "location": "bar_top"}},
+        {"at_ms": 100000, "kind": "background", "id": "floor_bg_dj", "payload": {"scene": "dj_names_self"}},
+        {"at_ms": 109000, "kind": "enemy", "id": "floor_bottle_2", "payload": {"enemy": "bottle_service_valkyrie"}},
+        {"at_ms": 120000, "kind": "finish", "id": "floor_finish", "payload": {"next": "d1_bathroom"}}
+      ]
+    },
+    {
+      "id": "d1_bathroom",
+      "district_id": "velvet_entry",
+      "name": "Bathroom Economy",
+      "duration_ms": 105000,
+      "environment": "nightclub_bathroom",
+      "pi_enabled": true,
+      "esp32_enabled": true,
+      "events": [
+        {"at_ms": 1000, "kind": "bark", "id": "bath_intro", "payload": {"text": "THE BATHROOM HAS ITS OWN ECONOMY."}},
+        {"at_ms": 5000, "kind": "background", "id": "bath_gossip_1", "payload": {"scene": "bathroom_gossip_circle"}},
+        {"at_ms": 10000, "kind": "pickup", "id": "bath_dust_1", "payload": {"pickup": "thinking_dust", "location": "sink_floor"}},
+        {"at_ms": 18000, "kind": "hazard", "id": "bath_queue_1", "payload": {"hazard": "moving_bathroom_queue"}},
+        {"at_ms": 25000, "kind": "pickup", "id": "bath_krn_1", "payload": {"pickup": "krn_can", "location": "cubicle_floor"}},
+        {"at_ms": 33000, "kind": "pigeon", "id": "bath_pidge_vent", "payload": {"action": "enter_air_vent"}},
+        {"at_ms": 40000, "kind": "enemy", "id": "bath_oracle_1", "payload": {"enemy": "afterparty_oracle"}},
+        {"at_ms": 48000, "kind": "checkpoint", "id": "bath_checkpoint_1", "payload": {"label": "mirror_bank"}},
+        {"at_ms": 56000, "kind": "hazard", "id": "bath_dryer", "payload": {"hazard": "broken_hand_dryer"}},
+        {"at_ms": 64000, "kind": "pickup", "id": "bath_dust_2", "payload": {"pickup": "thinking_dust", "location": "handbag_spill"}},
+        {"at_ms": 73000, "kind": "background", "id": "bath_attendant", "payload": {"scene": "mysterious_attendant"}},
+        {"at_ms": 81000, "kind": "enemy", "id": "bath_oracle_2", "payload": {"enemy": "afterparty_oracle"}},
+        {"at_ms": 90000, "kind": "pigeon", "id": "bath_pidge_oracle", "payload": {"action": "warn_fake_hazard"}},
+        {"at_ms": 105000, "kind": "finish", "id": "bath_finish", "payload": {"next": "d1_promoter"}}
+      ]
+    },
+    {
+      "id": "d1_promoter",
+      "district_id": "velvet_entry",
+      "name": "The Promoter",
+      "duration_ms": 135000,
+      "environment": "promoter_boss_room",
+      "pi_enabled": true,
+      "esp32_enabled": false,
+      "events": [
+        {"at_ms": 1000, "kind": "bark", "id": "promoter_intro", "payload": {"text": "YOUR NAME IS NOT ON THE LIST."}},
+        {"at_ms": 5000, "kind": "boss_phase", "id": "promoter_phase_1", "payload": {"phase": "guest_list"}},
+        {"at_ms": 28000, "kind": "pickup", "id": "promoter_krn_1", "payload": {"pickup": "krn_can", "location": "vip_table"}},
+        {"at_ms": 35000, "kind": "boss_phase", "id": "promoter_phase_2", "payload": {"phase": "plus_one_swarm"}},
+        {"at_ms": 62000, "kind": "checkpoint", "id": "promoter_checkpoint_1", "payload": {"label": "phase_two"}},
+        {"at_ms": 68000, "kind": "boss_phase", "id": "promoter_phase_3", "payload": {"phase": "venue_capacity"}},
+        {"at_ms": 84000, "kind": "pigeon", "id": "promoter_pidge_theft", "payload": {"action": "steal_guest_list_tablet"}},
+        {"at_ms": 96000, "kind": "pickup", "id": "promoter_dust_1", "payload": {"pickup": "thinking_dust", "location": "boss_drop"}},
+        {"at_ms": 103000, "kind": "boss_phase", "id": "promoter_phase_4", "payload": {"phase": "final_entry_denied"}},
+        {"at_ms": 127000, "kind": "bark", "id": "promoter_outro", "payload": {"text": "FINE. YOU'RE ON THE LIST NOW."}},
+        {"at_ms": 135000, "kind": "finish", "id": "promoter_finish", "payload": {"next": "district_2"}}
+      ]
+    }
+  ]
+}
