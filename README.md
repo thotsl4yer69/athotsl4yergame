@@ -20,6 +20,30 @@ The game is adult nightclub satire. All human characters are explicitly 21+. Vis
 - 30 FPS minimum on Pi Zero 2 W
 - Mouse input must emulate touch during desktop development
 
+## Run District 1
+
+```sh
+python -m pip install -e ".[dev]"
+packet-loss --windowed
+```
+
+Use the mouse exactly as the XPT2046 touchscreen: tap left to jump, tap right to
+attack/interact, swipe down to dodge, and swipe up to send Packet Pidge's
+distraction. `--touch-debug` shows the shared input classifier. Run the
+non-interactive SDL smoke test with:
+
+```sh
+packet-loss --headless-test
+```
+
+District 1 contains five short stages—The Queue, Coat Check Collapse, Main
+Floor Meltdown, Bathroom Economy, and The Promoter. Each has a Packet Pidge
+interaction and a hidden pickup route. Progress is saved atomically in the
+user data directory; a malformed save safely starts a new campaign.
+
+The primitive placeholder renderer has no runtime assets and is capped at 30
+FPS for the Pi Zero 2 W target.
+
 ## First milestone
 
 Build a polished vertical slice containing:
