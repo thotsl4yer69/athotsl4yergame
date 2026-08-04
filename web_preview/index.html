@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>TH0TSL4YER69 // Packet Loss</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #05030c; }
+    body { display: grid; place-items: center; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    #wrap { position: relative; width: min(100vw, calc(100vh * 1.5)); aspect-ratio: 3 / 2; background: #080410; box-shadow: 0 0 70px #ff2ba866; }
+    canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; }
+    #controls { position: absolute; inset: auto 0 0; height: 23%; display: grid; grid-template-columns: repeat(4, 1fr); opacity: .001; }
+    #controls button { border: 0; background: transparent; }
+    #badge { position: absolute; right: 8px; bottom: 5px; font-size: clamp(7px, 1.2vw, 11px); color: #fff8; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <main id="wrap" aria-label="TH0TSL4YER69 playable retro arcade prototype">
+    <canvas id="game" width="480" height="320"></canvas>
+    <div id="controls" aria-hidden="true">
+      <button data-action="left"></button><button data-action="right"></button>
+      <button data-action="jump"></button><button data-action="attack"></button>
+    </div>
+    <div id="badge">WEB VISUAL TARGET // PI + ESP32 PORT</div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
