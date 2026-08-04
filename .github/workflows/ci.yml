@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main, agent/dual-platform-foundation]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Ruff
+        run: ruff check .
+      - name: Tests
+        run: pytest
+      - name: Headless campaign smoke test
+        run: python -m packet_loss --headless-smoke-test --save-path /tmp/packet-loss-save.json
+
+  esp32:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install PlatformIO
+        run: python -m pip install platformio
+      - name: Build ESP32-S3 Lite
+        working-directory: esp32
+        run: pio run
