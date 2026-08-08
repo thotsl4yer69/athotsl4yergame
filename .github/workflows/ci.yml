@@ -8,6 +8,8 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     timeout-minutes: 10
     env:
       SDL_VIDEODRIVER: dummy
@@ -29,6 +31,8 @@ jobs:
 
   esp32:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
