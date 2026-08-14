@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +27,7 @@ def _validate_sheet(
     animation = definition.animations[animation_name]
     errors: list[str] = []
     expected_name = f"{definition.character_id}_{animation_name}.png"
-    if animation.sheet.name != expected_name or not re.fullmatch(r"[a-z0-9_]+\.png", expected_name):
+    if animation.sheet.name != expected_name:
         errors.append(f"{animation.sheet}: filename must be {expected_name}")
     if not animation.sheet.is_file():
         return [*errors, f"{animation.sheet}: missing sheet"]

@@ -55,7 +55,10 @@ def export_esp32_assets(
     output_root = Path(output_dir)
     metadata: dict[str, object] = {"format": "rgb565-le+alpha8", "size": target_size, "characters": []}
 
-    for definition in definitions.values():
+    for character_id in sorted(definitions):
+        definition = definitions[character_id]
+        target_width = target_size
+        target_height = round(target_size * definition.canvas_size[1] / definition.canvas_size[0])
         character_dir = output_root / definition.character_id
         if character_dir.exists():
             shutil.rmtree(character_dir)
@@ -63,12 +66,14 @@ def export_esp32_assets(
         character_data: dict[str, object] = {
             "id": definition.character_id,
             "pivot": [
-                round(definition.pivot[0] * target_size / definition.canvas_size[0]),
-                round(definition.pivot[1] * target_size / definition.canvas_size[1]),
+                round(definition.pivot[0] * target_width / definition.canvas_size[0]),
+                round(definition.pivot[1] * target_height / definition.canvas_size[1]),
             ],
+            "size": [target_width, target_height],
             "animations": {},
         }
-        for name, animation in definition.animations.items():
+        for name in sorted(definition.animations):
+            animation = definition.animations[name]
             sheet = pygame.image.load(animation.sheet)
             animation_data: list[dict[str, object]] = []
             for frame_number in range(animation.frames):
@@ -80,7 +85,7 @@ def export_esp32_assets(
                         definition.canvas_size[1],
                     )
                 )
-                frame = pygame.transform.scale(source, (target_size, target_size))
+                frame = pygame.transform.scale(source, (target_width, target_height))
                 stem = f"{definition.character_id}_{name}_{frame_number:02d}"
                 rgb565_path = character_dir / f"{stem}.rgb565"
                 alpha_path = character_dir / f"{stem}.alpha"

@@ -45,6 +45,12 @@ def _write_sheet(path: Path, size: tuple[int, int], alpha: bool = True) -> None:
     pygame.image.save(sheet, path)
 
 
+def _repo_tmp_dir(tmp_path: Path) -> Path:
+    path = ROOT / "build" / "pytest_character_assets" / tmp_path.name
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
 def test_committed_manifest_parses_and_loads_neon_siren_frames() -> None:
     definition = load_character_manifest()["neon_siren"]
     assert definition.pivot == (64, 116)
@@ -62,7 +68,7 @@ def test_committed_manifest_parses_and_loads_neon_siren_frames() -> None:
 
 
 def test_manifest_rejects_non_adult_character(tmp_path: Path) -> None:
-    sheet = tmp_path / "neon_siren_idle.png"
+    sheet = _repo_tmp_dir(tmp_path) / "neon_siren_idle.png"
     _write_sheet(sheet, (256, 128))
     manifest = _write_manifest(tmp_path, sheet)
     raw = json.loads(manifest.read_text(encoding="utf-8"))
@@ -73,12 +79,18 @@ def test_manifest_rejects_non_adult_character(tmp_path: Path) -> None:
         load_character_manifest(manifest)
 
 
+def test_manifest_rejects_sheet_outside_project_root(tmp_path: Path) -> None:
+    manifest = _write_manifest(tmp_path, Path("../../etc/passwd"))
+    with pytest.raises(CharacterManifestError, match="stay within project root"):
+        load_character_manifest(manifest)
+
+
 def test_validator_reports_missing_and_wrong_sized_sheets(tmp_path: Path) -> None:
-    missing = _write_manifest(tmp_path, tmp_path / "neon_siren_idle.png")
+    missing = _write_manifest(tmp_path, _repo_tmp_dir(tmp_path) / "neon_siren_idle.png")
     with pytest.raises(SpriteValidationError, match="missing sheet"):
         validate_manifest(missing)
 
-    sheet = tmp_path / "neon_siren_idle.png"
+    sheet = _repo_tmp_dir(tmp_path) / "neon_siren_idle.png"
     _write_sheet(sheet, (128, 128))
     wrong_sized = _write_manifest(tmp_path, sheet)
     with pytest.raises(SpriteValidationError, match="expected 256x128"):
@@ -86,7 +98,7 @@ def test_validator_reports_missing_and_wrong_sized_sheets(tmp_path: Path) -> Non
 
 
 def test_validator_reports_missing_alpha_channel(tmp_path: Path) -> None:
-    sheet = tmp_path / "neon_siren_idle.png"
+    sheet = _repo_tmp_dir(tmp_path) / "neon_siren_idle.png"
     _write_sheet(sheet, (256, 128), alpha=False)
     manifest = _write_manifest(tmp_path, sheet)
 
@@ -102,3 +114,44 @@ def test_esp32_export_is_deterministic(tmp_path: Path) -> None:
     second_frame = tmp_path / "second" / "neon_siren" / first_frame.name
     assert len(first_frame.read_bytes()) == 64 * 64 * 2
     assert hashlib.sha256(first_frame.read_bytes()).digest() == hashlib.sha256(second_frame.read_bytes()).digest()
+
+
+def test_esp32_export_sorts_output_and_preserves_aspect_ratio(tmp_path: Path) -> None:
+    sprites = _repo_tmp_dir(tmp_path) / "sprites"
+    sprites.mkdir()
+    _write_sheet(sprites / "beta_walk.png", (128, 32))
+    _write_sheet(sprites / "beta_idle.png", (128, 32))
+    _write_sheet(sprites / "alpha_idle.png", (128, 32))
+    manifest = tmp_path / "characters.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "characters": [
+                    {
+                        "id": "beta",
+                        "adult_age_minimum": 25,
+                        "canvas": {"width": 64, "height": 32, "pivot": [32, 24], "transparent": True},
+                        "animations": {
+                            "walk": {"sheet": str(sprites / "beta_walk.png"), "frames": 2, "fps": 6},
+                            "idle": {"sheet": str(sprites / "beta_idle.png"), "frames": 2, "fps": 6},
+                        },
+                    },
+                    {
+                        "id": "alpha",
+                        "adult_age_minimum": 25,
+                        "canvas": {"width": 64, "height": 32, "pivot": [32, 24], "transparent": True},
+                        "animations": {"idle": {"sheet": str(sprites / "alpha_idle.png"), "frames": 2, "fps": 6}},
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    metadata_path = export_esp32_assets(manifest_path=manifest, output_dir=tmp_path / "out", target_size=64)
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    assert [character["id"] for character in metadata["characters"]] == ["alpha", "beta"]
+    assert list(metadata["characters"][1]["animations"]) == ["idle", "walk"]
+    frame = tmp_path / "out" / "beta" / "beta_idle_00.rgb565"
+    assert len(frame.read_bytes()) == 64 * 32 * 2

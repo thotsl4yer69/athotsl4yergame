@@ -64,6 +64,7 @@ def load_character_manifest(path: str | Path | None = None) -> dict[str, Charact
         raise CharacterManifestError("manifest characters must be a non-empty list")
 
     definitions: dict[str, CharacterDefinition] = {}
+    root = project_root().resolve()
     for index, character in enumerate(characters):
         if not isinstance(character, dict):
             raise CharacterManifestError(f"characters[{index}] must be an object")
@@ -96,9 +97,12 @@ def load_character_manifest(path: str | Path | None = None) -> dict[str, Charact
             sheet = animation.get("sheet")
             if not isinstance(sheet, str) or not sheet:
                 raise CharacterManifestError(f"{character_id}.{name}: sheet must be a path")
+            resolved_sheet = (project_root() / sheet).resolve()
+            if not resolved_sheet.is_relative_to(root):
+                raise CharacterManifestError(f"{character_id}.{name}: sheet must stay within project root")
             animations[name] = SpriteAnimation(
                 name=name,
-                sheet=project_root() / sheet,
+                sheet=resolved_sheet,
                 frames=_as_positive_int(animation.get("frames"), f"{character_id}.{name}.frames"),
                 fps=_as_positive_int(animation.get("fps"), f"{character_id}.{name}.fps"),
             )
