@@ -300,3 +300,19 @@ Version 1.0 should contain:
 - endless nightclub mode
 
 The remaining districts can follow as free content updates after the engine, export pipeline, and art workflow are stable.
+
+## District 1 — Technical Implementation Notes
+
+The Python stage loader uses five stable stage IDs: `d1_queue`,
+`d1_coat_check`, `d1_main_floor`, `d1_bathroom_economy`, and `d1_promoter`.
+The same IDs and balance names are exported to reduced ESP32 data so companion
+builds do not need a translation table.
+
+Each stage puts Packet Pidge at the mid-stage interaction point. After speaking
+to Pidge, a swipe-up retrieves that stage's hidden KRN can or Thinking Dust
+route. Pidge's swipe-up is also a non-combat-contact distraction during The
+Promoter encounter, which advances its four phases: Guest List, Follower
+Flood, Sparkler Pitch, and Final Receipt.
+
+Background adult performers are decorative parallax rendering only. They do
+not instantiate gameplay entities or participate in combat collision layers.
